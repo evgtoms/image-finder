@@ -20,6 +20,7 @@ export default function useAxios() {
     const [response, setResponse] = useState<ImageRecord|null>(null);
     const fetchImage = useCallback(async (query: string) => {
         try {
+            setError('');
             const { data } = await axios.get<ImageRecord>(process.env.REACT_APP_API_URL, {params: { query, client_id: process.env.REACT_APP_API_KEY }})
             setResponse(data);
         } catch (err) {
