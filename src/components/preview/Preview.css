@@ -1,0 +1,21 @@
+.preview-container{
+    width: 100%;
+    height: 100%
+}
+
+.button-row {
+    margin: 20px
+}
+button {
+    margin:10px;
+}
+
+button:focus, button:hover {
+    border: 2px solid;
+    background-color: lightsteelblue;
+}
+
+.preview-image{
+    max-width:100%;
+    height: auto;
+}
