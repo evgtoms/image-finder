@@ -7,6 +7,7 @@ type URLs = {
     regular: string;
     thumb: string;
 }
+
 export type ImageRecord = {
     alt_description: string;
     id: string;
@@ -14,10 +15,16 @@ export type ImageRecord = {
     width: number;
     urls: URLs
 }
-
+/**
+ * Custom hook to fetch image information by query
+ * @returns {{response: ImageRecord, error: string, fetchImage: (query: string) => Promise<void>}}
+ */
 export default function useAxios() {
     const [error, setError] = useState('');
     const [response, setResponse] = useState<ImageRecord|null>(null);
+    /**
+     * Function to get image by query 
+     */
     const fetchImage = useCallback(async (query: string) => {
         try {
             setError('');

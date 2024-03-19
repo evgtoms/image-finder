@@ -7,6 +7,11 @@ type PreviewProps = {
     error?: string;
     response?: ImageRecord | null;
 }
+/**
+ * Component to display image with Accept and Reject buttons
+ * @param {PreviewProps} props - Component props with handlers for Accept, Recect buttons, error during fetching image, image response
+ * @returns {JSX.Element}
+ */
 export default function Preview(props: PreviewProps) {
     const { response, onAccept, onReject, error } = props;
     const url = response?.urls.small;

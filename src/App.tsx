@@ -7,7 +7,10 @@ import useAxios from './hooks/useAxios';
 import getQuery from './utils/getQuery';
 import Result from './components/result/Result';
 
-
+/**
+ * Main component with input form, preview view and final result view
+ * @returns {JSX.Element}
+ */
 function App() {
   const [formData, setFormData] = useState<FieldValues|null>(null);
   const {response, error, fetchImage} = useAxios();

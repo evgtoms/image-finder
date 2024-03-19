@@ -7,6 +7,11 @@ type IputFormProps = {
   onSubmit?: (data: FieldValues) => void
 }
 
+/**
+ * Component with form to enter first, last name and select or type topic
+ * @param {IputFormProps} props - Component props with onSubmit handler 
+ * @returns {JSX.Element}
+ */
 export default function InputForm(props: IputFormProps) {
   const {
     register,
@@ -39,12 +44,17 @@ export default function InputForm(props: IputFormProps) {
           <input            
             {
               ...register('firstName', {
-                required: "First Name can not be empty"
+                required: "First Name can not be empty",
+                pattern: {
+                  value: /^[A-Za-z]+$/i,
+                  message: "Only letters allowed",
+                },
               })
             }
             aria-invalid={errors.firstName ? "true" : "false"}
             type="text"
             data-testid="firstName"
+            autoFocus
           />
         </label>
         {errors.firstName && <span role="alert">{`${errors.firstName.message}`}</span>}
@@ -55,7 +65,11 @@ export default function InputForm(props: IputFormProps) {
           <input            
             {
               ...register('lastName', {
-                required: "Last Name can not be empty"
+                required: "Last Name can not be empty",
+                pattern: {
+                  value: /^[A-Za-z]+$/i,
+                  message: "Only letters allowed",
+                },
               })
             }
             type="text"
@@ -84,7 +98,11 @@ export default function InputForm(props: IputFormProps) {
             <input            
               {
                 ...register('otherTopic', {
-                  required: "Topic can not be empty"
+                  required: "Topic can not be empty",
+                  pattern: {
+                    value: /^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$/,
+                    message: "Letters, digits and spaces between words allowed",
+                  },
                 })
               }
               type="text"

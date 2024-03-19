@@ -6,6 +6,11 @@ type ResultProps = {
     response: ImageRecord | null;
     filter: FieldValues | null;
 }
+/**
+ * Component to display image, first and last name
+ * @param {ResultProps} props - Component props with form data and image response
+ * @returns {JSX.Element}
+ */
 export default function Result(props: ResultProps) {
     const { filter, response} = props;
     const url = response?.urls.thumb;
