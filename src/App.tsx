@@ -13,9 +13,12 @@ import Result from './components/result/Result';
  */
 function App() {
   const [formData, setFormData] = useState<FieldValues|null>(null);
-  const {response, error, fetchImage} = useAxios();
+  const {response, error, isLoading, fetchImage} = useAxios();
   const [imageAccepted, setImageAccepted] = useState(false);
-
+  const [showForm, setShowForm] = useState(true);
+  /**
+   * Fetching image data once form data is populated
+   */
   useEffect(
     ()=> {
       if (formData) {
@@ -24,13 +27,29 @@ function App() {
     }, [formData]
   );
 
-  const showInputForm = useMemo(() => !formData && !imageAccepted, [formData, imageAccepted]);
-  const showPreview = useMemo(() => formData && !imageAccepted, [formData, imageAccepted]);
+  /**
+   * Handler for submit form 
+   * @param {FieldValues} formData - Populated form data
+   */
+  const handleSubmit = (formData: FieldValues) =>{
+    setFormData(formData);
+    setShowForm(false);
+  }
+
+  /**
+   * Handler for showing the form view
+   */
+  const handleBackToSearch = () => {
+    setShowForm(true);
+  }
+
+  const showInputForm = useMemo(() => showForm && !imageAccepted, [showForm, imageAccepted]);
+  const showPreview = useMemo(() => !showForm && !imageAccepted, [showForm, imageAccepted]);
   return (
     <div className="App">
       <h1>Image finder</h1>
-      {showInputForm && <InputForm onSubmit={setFormData}></InputForm>}
-      {showPreview && <Preview onAccept={() =>{ setImageAccepted(true) }} onReject={() => { fetchImage(getQuery(formData as FieldValues)) }} error={error} response={response}/>}
+      {showInputForm && <InputForm formData={formData} onSubmit={handleSubmit}></InputForm>}
+      {showPreview && <Preview onAccept={() =>{ setImageAccepted(true) }} onReject={() => { fetchImage(getQuery(formData as FieldValues)) }} backToSearch={handleBackToSearch} error={error} response={response} isLoading={isLoading}/>}
       {imageAccepted && <Result response={response} filter={formData} />}
     </div>
   );

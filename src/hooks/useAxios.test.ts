@@ -23,7 +23,8 @@ describe("useAxios Hook", () => {
         const { result } = renderHook(() => useAxios())
         expect(result.current).toMatchObject({
             error: "",
-            response: null
+            response: null,
+            isLoading: false
         })        
     })
     test("call fetch", async () => {
@@ -32,7 +33,8 @@ describe("useAxios Hook", () => {
         await act(async () => result.current.fetchImage('query'));
         expect(result.current).toMatchObject({
             error: "",
-            response: useApiMockData
+            response: useApiMockData,
+            isLoading: false,
         })      
     })
 
@@ -42,8 +44,9 @@ describe("useAxios Hook", () => {
         const { result } = renderHook(() => useAxios())
         await act(async () => result.current.fetchImage('query'));
         expect(result.current).toMatchObject({
-            error: "can not load image",
-            response: null
+            error: "Can not load image, please retry",
+            response: null,
+            isLoading: false
         })      
     })
 })

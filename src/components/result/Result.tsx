@@ -18,7 +18,7 @@ export default function Result(props: ResultProps) {
     const caption = `${filter?.firstName} ${filter?.lastName}`;
     return (
         <section className="result-container" data-testid="result">
-            <div className='caption'>{caption}</div>
+            <div className='caption' aria-label="First and last name">{caption}</div>
             {url && <img src={url} className="image" alt={alt} />}     
         </section>
     );

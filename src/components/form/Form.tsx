@@ -4,12 +4,13 @@ import type { FieldValues } from 'react-hook-form';
 import './Form.css';
 
 type IputFormProps = {
-  onSubmit?: (data: FieldValues) => void
+  onSubmit?: (data: FieldValues) => void;
+  formData?: FieldValues | null;
 }
 
 /**
  * Component with form to enter first, last name and select or type topic
- * @param {IputFormProps} props - Component props with onSubmit handler 
+ * @param {IputFormProps} props - Component props with onSubmit handler and initial form data
  * @returns {JSX.Element}
  */
 export default function InputForm(props: IputFormProps) {
@@ -19,7 +20,7 @@ export default function InputForm(props: IputFormProps) {
     handleSubmit,
     formState: { errors },
     watch
-  } = useForm();
+  } = useForm({defaultValues: props.formData || {}});
 
   const onSubmit = (data: FieldValues) => {
     props.onSubmit?.(data);
@@ -94,7 +95,7 @@ export default function InputForm(props: IputFormProps) {
       {selectedTopic === "other" && 
         <div className="form-row">
           <label>
-            Provide topic
+            Provide custom topic
             <input            
               {
                 ...register('otherTopic', {

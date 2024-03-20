@@ -7,7 +7,7 @@ describe('preview tests', () => {
     test('renders preview', () => {
         const mockAccept = jest.fn();
         const mockReject = jest.fn();
-        render(<Preview onAccept={mockAccept} onReject={mockReject} response={
+        render(<Preview onAccept={mockAccept} onReject={mockReject} backToSearch={()=>{}} response={
             {urls: {small: 'small', regular: 'regular', thumb: 'thumb', full: 'full'}, alt_description: 'description', id: '0', height: 1, width: 1}
         }/>);
 
@@ -28,7 +28,8 @@ describe('preview tests', () => {
     test('renders preview with error', () => {
         const mockAccept = jest.fn();
         const mockReject = jest.fn();
-        render(<Preview onAccept={mockAccept} onReject={mockReject} error={'error'}/>);
+        const mockBackToSearch = jest.fn();
+        render(<Preview onAccept={mockAccept} onReject={mockReject} backToSearch={mockBackToSearch} error={'Can not load image, please retry'}/>);
 
         const btnReload = screen.getByText(/Reload/i);
         expect(btnReload).toBeInTheDocument();
@@ -37,6 +38,8 @@ describe('preview tests', () => {
         const img = screen.queryByRole('img');
         expect(img).toBeNull();
 
+        fireEvent.click(screen.getByText(/Back to search/i));   
+        expect(mockBackToSearch).toBeCalled();
         fireEvent.click(screen.getByText(/Reload/i));   
         expect(mockReject).toBeCalled();
     });

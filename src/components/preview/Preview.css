@@ -19,3 +19,8 @@ button:focus, button:hover {
     max-width:100%;
     height: auto;
 }
+
+.loading-container {
+    margin: 20px;
+    text-align: center;
+}
