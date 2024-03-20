@@ -1,33 +1,42 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from 'react-hook-form';
 import type { FieldValues } from 'react-hook-form';
 import './Form.css';
-
-type IputFormProps = {
-  onSubmit?: (data: FieldValues) => void;
-  formData?: FieldValues | null;
-}
+import { useContextSelector } from "use-context-selector";
+import { StateContext } from "../../contexts/stateContext";
+import { View } from "../../types";
 
 /**
  * Component with form to enter first, last name and select or type topic
- * @param {IputFormProps} props - Component props with onSubmit handler and initial form data
  * @returns {JSX.Element}
  */
-export default function InputForm(props: IputFormProps) {
+export default function InputForm() {
+  const formData = useContextSelector(StateContext, (state) => state?.formData);
+  const setFormData = useContextSelector(StateContext, (state) => state?.setFormData);
+  const setView = useContextSelector(StateContext, (state) => state?.setView);
+
   const {
     register,
     unregister,
     handleSubmit,
     formState: { errors },
     watch
-  } = useForm({defaultValues: props.formData || {}});
-
+  } = useForm({defaultValues: formData || {}});
+  
+  /**
+   * Handler for submit button
+   * @param {FieldValues} data - Form data
+   */
   const onSubmit = (data: FieldValues) => {
-    props.onSubmit?.(data);
+    setFormData?.(data);
+    setView?.(View.Preview);
   }
 
   const selectedTopic = watch("topic");
 
+  /**
+   * Register or unregister additional text field if Other option in combo selected
+   */
   useEffect(() => {
     if (selectedTopic === "other") {
       register("otherTopic");

@@ -1,23 +1,51 @@
 import './Preview.css';
-import type { ImageRecord } from '../../hooks/useAxios';
+import { useContextSelector } from 'use-context-selector';
+import { StateContext } from '../../contexts/stateContext';
+import { View } from '../../types';
+import { useEffect } from 'react';
 
-type PreviewProps = {
-    onAccept: () => void;
-    onReject: () => void;
-    backToSearch: () => void;
-    error?: string;
-    response?: ImageRecord | null;
-    isLoading?: boolean;
-}
 /**
  * Component to display image with Accept and Reject buttons
- * @param {PreviewProps} props - Component props with handlers for Accept, Recect buttons, error during fetching image, image response
  * @returns {JSX.Element}
  */
-export default function Preview(props: PreviewProps) {
-    const { response, onAccept, onReject, backToSearch, error, isLoading } = props;
-    const url = response?.urls.small;
-    const alt = response?.alt_description;
+export default function Preview() {
+    const getImage = useContextSelector(StateContext, (state) => state?.getImage);
+    const isLoading = useContextSelector(StateContext, (state) => state?.isLoading);
+    const error = useContextSelector(StateContext, (state) => state?.error);
+    const imageData = useContextSelector(StateContext, (state) => state?.imageData);
+    const setView = useContextSelector(StateContext, (state) => state?.setView);
+
+    const url = imageData?.urls.small;
+    const alt = imageData?.alt_description;
+
+    /**
+     * Get image data on mount
+     */
+    useEffect(()=> {
+        getImage?.();
+        }, []
+    );
+
+    /**
+     * Handler for Accept button
+     */
+    const onAccept = () => {
+        setView?.(View.Result);
+    }
+
+    /**
+     * Handler for reject button
+     */
+    const onReject = () => {
+        getImage?.();
+    }
+
+    /**
+     * Handler for back button
+     */
+    const backToSearch = () => {
+        setView?.(View.Form);
+    }
 
     return (
     <section className="preview-container" data-testid="preview">

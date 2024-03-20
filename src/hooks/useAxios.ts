@@ -1,20 +1,7 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useState, useCallback } from "react";
+import { ImageRecord } from "../types";
 
-type URLs = {
-    full: string;
-    small: string;
-    regular: string;
-    thumb: string;
-}
-
-export type ImageRecord = {
-    alt_description: string;
-    id: string;
-    height: number;
-    width: number;
-    urls: URLs
-}
 /**
  * Custom hook to fetch image information by query
  * @returns {{response: ImageRecord, error: string, isLoading: boolean, fetchImage: (query: string) => Promise<void>}}
@@ -32,12 +19,14 @@ export default function useAxios() {
             setError('');
             const { data } = await axios.get<ImageRecord>(process.env.REACT_APP_API_URL, {params: { query, client_id: process.env.REACT_APP_API_KEY }})
             setResponse(data);
+            return data;
         } catch (err) {
             if (axios.isAxiosError(err) && err.response?.data?.errors?.length) {                
                 setError(err.response.data.errors[0]);                
             } else {
                 setError('Can not load image, please retry');
             }
+            return null;
         } finally {
             setIsLoading(false);
         }
